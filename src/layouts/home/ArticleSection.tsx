@@ -7,7 +7,7 @@ import thumbnail04 from "@/assets/card_05.jpg";
 
 export default function ArticleSection() {
     return (
-        <section className="py-12">
+        <section className="py-12 bg-gray-50">
 			<div className="container flex flex-col gap-4">
 				<SectionTitle>Cuộc sống tại TeS</SectionTitle>
 				<div className="flex gap-5">

@@ -97,7 +97,8 @@ const config: Config = {
         'xs': '2px'
       },
       lineHeight: {
-        '14': '3.5rem'
+        '14': '3.5rem',
+        '16': '4rem'
       },
       keyframes: {
         'fade-in': {

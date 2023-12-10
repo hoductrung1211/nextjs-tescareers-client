@@ -6,6 +6,7 @@ html {
     font-size: 14px;
     background-color: #F5F5F7;
     color: #424245;
+    scroll-behavior: smooth;
 }
 
 input {

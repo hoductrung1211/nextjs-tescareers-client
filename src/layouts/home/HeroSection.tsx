@@ -11,6 +11,7 @@ export default function HeroSection() {
 					<h2 className="mb-9 text-4xl font-medium">Tạo ra tương lai bạn muốn</h2>
 					<p className="mb-4 text-xl">Tìm công việc tiếp theo của bạn tại <span className="text-green-sea font-bold">TeS</span></p>
 					<TextField
+						className="bg-white"
 						placeholder="Nhập công việc bạn muốn tìm kiếm..."
 						InputProps={{
 							startAdornment: (

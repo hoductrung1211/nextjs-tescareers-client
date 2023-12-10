@@ -61,7 +61,7 @@ export default function Login({
     }
 
     return (
-        <div className="w-[880px] flex gap-20 px-10 py-8 border border-concrete bg-foreground shadow-md rounded-xl">
+        <div className="w-[880px] flex gap-20 px-10 py-8 border border-concrete bg-white shadow-md rounded-xl">
             <section className="flex flex-col items-end text-right text-sm w-full ">
                 <div className="relative w-4/5 h-full">
                     <Image

@@ -1,31 +1,31 @@
-export const leftNavigation = [
+export const pageNavigation = [
     {
         text: 'Trang chủ',
         href: '/'
     },
     {
         text: 'Tìm công việc',
-        href: '/'
+        href: '/jobs'
     },
     {
         text: 'Cuộc sống tại TeS',
-        href: '/'
+        href: '/life-at-tes'
     },
     {
         text: 'Tips & Tricks',
-        href: '/'
+        href: '/tips-and-tricks'
     },
 ];
 
-export const userFeatures = [
+export const userNavigation = [
     {
         text: "Thông tin cá nhân",
-        href: "",
+        href: "/profile",
         icon: "user",
     },
     {
         text: "Lịch sử ứng tuyển",
-        href: "",
+        href: "/applied-jobs-history",
         icon: "clock"
     }, 
 ];

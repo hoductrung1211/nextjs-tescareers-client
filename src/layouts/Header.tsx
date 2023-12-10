@@ -4,24 +4,25 @@ import Signup from "@/features/sign-up/Signup";
 import useModal from "@/hooks/useModal";
 import Logo from "@/components/Logo";
 import Link from "next/link";
-import { leftNavigation, userFeatures } from "@/configs/headerNavigation";
+import { pageNavigation, userNavigation } from "@/configs/routing";
 import { useEffect, useState } from "react";
 import { Avatar, Popover } from "@mui/material";
 import Icon from "@/components/Icon";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
-
 	return (
 		<header className="sticky top-0 inset-x-0 bg-foreground z-10 shadow-sm">
-			<nav className="flex justify-between w-[1200px] h-16 mx-auto px-3 leading-14 font-semibold">
+			<nav className="flex justify-between w-[1200px] h-16 mx-auto px-3 leading-16 font-semibold">
 				<div className="flex gap-10">
 					<Logo />
 					{
-						leftNavigation.map(link =>
+						pageNavigation.map(link =>
 							<Link
 								className=" border-b-2 border-transparent hover:border-primary transition duration-150"
 								key={link.text}
-								href={link.href}>
+								href={link.href}
+							>
 								{link.text}
 							</Link>
 						)
@@ -59,6 +60,7 @@ function HeaderFeatures() {
 	function handleLogout() {
 		localStorage.clear();
 		setClientName("");
+		// router.push("/"); 
 	}
 
 	const handlePopupLogin = () => {
@@ -153,8 +155,11 @@ function UserUtils({
 				<section className="w-96 p-4 flex flex-col gap-4 bg-gray-50">
 					<p className="px-4">Xin chào, <span className="font-semibold">{clientName}</span></p>
 					{
-						userFeatures.map(feature => (
-							<Link className="flex items-center justify-between h-16 px-4 border border-transparent hover:border-gray-200 hover:bg-slate-100 font-semibold rounded-md" href={feature.href}>
+						userNavigation.map(feature => (
+							<Link
+								className="flex items-center justify-between h-16 px-4 border-2 border-transparent hover:border-gray-200 hover:bg-slate-100 font-semibold rounded-md" href={feature.href}
+								onClick={handleClose}
+							>
 								<div className="flex gap-4 items-center">
 									<Icon className="w-10 h-10 grid place-items-center rounded-full bg-gray-200" name={feature.icon} size="lg" />
 									{feature.text}
