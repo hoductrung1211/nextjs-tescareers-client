@@ -37,13 +37,18 @@ export default function Sidebar({
         },
     ];
 
+    let name = "";
+    if (localStorage) {
+        name = localStorage.getItem("fullName") ?? "";
+    }
+
     return (
         <aside className="sticky top-20 w-120 h-fit p-2 flex flex-col gap-2 rounded-lg border bg-white">
             <div className="h-16 p-4 flex items-center gap-4 bg-gray-50 rounded-md">
                 <Avatar>
-                    T
+                    {name[0]}
                 </Avatar>
-                <p>Ho Duc Trung</p>
+                <p>{name}</p>
             </div>
             {
                 navs.map(nav => (

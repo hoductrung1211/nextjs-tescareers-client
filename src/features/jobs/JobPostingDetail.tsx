@@ -7,7 +7,8 @@ import { isLoggedIn } from "@/utils/functions/checkLoggedIn";
 import { durationFromNow } from "@/utils/functions/getDuration";
 import { Button, Chip, } from "@mui/material";
 import { useEffect, useState } from "react";
-import Login from "../login/Login";
+import { isAxiosError } from "axios";
+import { applyJob } from "@/apis/applicationSubmission";
 
 interface IJobPostingDetailProps {
     jobPosting?: IJobPosting;
@@ -26,10 +27,6 @@ export default function JobPostingDetail({
     jobPosting
 }: IJobPostingDetailProps) {
     const setAlert = useAlert();
-    const {
-		setIsOpenModal,
-		setModal
-	} = useModal();
 
     const [fields, setFields] = useState<IJobPostingField[]>([]);
 
@@ -96,7 +93,7 @@ export default function JobPostingDetail({
                     <Button
                         className="bg-primary font-semibold"
                         variant="contained"
-                        onClick={() => {
+                        onClick={async () => {
                             if (!isLoggedIn()) {
                                 setAlert({
                                     message: "Bạn phải đăng nhập trước!",
@@ -104,11 +101,24 @@ export default function JobPostingDetail({
                                 })
                             }
 
-                            else {
-                                setAlert({
-                                    message: "Ứng tuyển thành công!",
-                                    severity: "success"
-                                })
+                            else if (jobPosting) {
+                                try {
+                                    await applyJob(jobPosting?.recruitmentId);
+                                    
+                                    setAlert({
+                                        message: "Ứng tuyển thành công!",
+                                        severity: "success"
+                                    });
+                                }
+                                catch (ex) {
+                                    if (isAxiosError(ex)) {
+                                        setAlert({
+                                            message: ex.message,
+                                            severity: "error"
+                                        });
+                                    }
+                                    console.log(ex);
+                                }
                             }
                         }}
                     >

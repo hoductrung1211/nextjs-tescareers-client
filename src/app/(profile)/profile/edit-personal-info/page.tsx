@@ -1,53 +1,94 @@
 "use client";
+import { getPersonalInfo, updatePersonalInfo } from "@/apis/candidate";
 import Field from "@/components/Field";
-import IconButton from "@/components/IconButton";
 import useAlert from "@/hooks/useAlert";
 import useConfirm from "@/hooks/useConfirm";
+import useLoadingAnimation from "@/hooks/useLoadingAnimation";
 import Sidebar from "@/layouts/Sidebar";
 import { Button, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-
-interface IEditText {
-	key: string;
-	label: string;
-	value: string;
-}
-
-interface IEditDatePicker {
-	key: string;
-	label: string;
-	value: Dayjs | null;
-}
-
-interface IEditRadio {
-	key: string;
-	label: string;
-	value: string;
-	radios: {
-		label: string;
-		value: string;
-	}[];
-}
-
-type IEditInfo = IEditText | IEditDatePicker | IEditRadio;
+import { useEffect, useState } from "react";
 
 export default function Page() {
+	const setLoading = useLoadingAnimation();
+	const setAlert = useAlert();
 	const confirm = useConfirm();
 	const router = useRouter();
 	const alert = useAlert();
 
-	const [firstName, setFirstName] = useState("Trung");
-	const [lastName, setLastName] = useState("Hồ Đức");
-	const [dateOfBirth, setDateOfBirth] = useState<Dayjs | null>(dayjs("12/11/2001"));
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
+	const [dateOfBirth, setDateOfBirth] = useState<Dayjs | null>(null);
 	const [sex, setSex] = useState(true);
 	const [placeOfOrigin, setPlaceOfOrigin] = useState("");
 	const [address, setAddress] = useState("");
 	const [identityCard, setIdentityCard] = useState("");
 	const [email, setEmail] = useState("");
 	const [phoneNumber, setPhoneNumber] = useState("");
+
+	useEffect(() => {
+		fetchData();
+	}, []);
+
+	async function fetchData() {
+		setLoading(true);
+		try {
+			const { data } = await getPersonalInfo();
+			setFirstName(data.user.firstName);
+			setLastName(data.user.lastName);
+			setDateOfBirth(dayjs(data.user.dateOfBirth));
+			setSex(data.user.sex);
+			setPlaceOfOrigin(data.user.placeOfOrigin);
+			setAddress(data.user.address);
+			setIdentityCard(data.user.identityCard);
+			setEmail(data.user.email);
+			setPhoneNumber(data.user.phoneNumber);
+		}
+		catch (ex) {
+			setAlert({
+				message: "Xảy ra lỗi khi nạp thông tin Hồ sơ cá nhân!",
+				severity: "error"
+			});
+		}
+		finally {
+			setLoading(false);
+		}
+	}
+
+	async function handleUpdatePersonalInfo() {
+		setLoading(true);
+		try {
+			await updatePersonalInfo({
+				address,
+				dateOfBirth: dateOfBirth?.toDate() ?? new Date(),
+				email,
+				firstName,
+				identityCard,
+				lastName,
+				phoneNumber,
+				placeOfOrigin,
+				sex
+			});
+
+			setAlert({
+				message: "Cập nhật thông tin cá nhân thành công!",
+				severity: "success"
+			});
+
+			router.push("/profile");
+		}
+		catch (ex) {
+			setAlert({
+				message: "Xảy ra lỗi khi cập nhật thông tin cá nhân!",
+				severity: "error"
+			});
+		}
+		finally {
+			setLoading(false);
+		}
+	}
 
 	return (
 		<div className="mt-4 mb-20">
@@ -153,7 +194,9 @@ export default function Page() {
 							variant="outlined"
 							className="font-semibold"
 							onClick={() => {
-
+								confirm("Những thông tin bị thay đổi sẽ không được lưu lại?", () => {
+									router.push("/profile");
+								});
 							}}
 						>
 							Hủy
@@ -164,12 +207,7 @@ export default function Page() {
 							className="bg-primary font-semibold"
 							onClick={() => {
 								confirm("Bạn có chắc chắn thay đổi thông tin cá nhân?", () => {
-									alert({
-										message: "Cập nhật thông tin cá nhân thành công!",
-										severity: "success"
-									});
-
-									router.push("./");
+									handleUpdatePersonalInfo();
 								});
 							}}
 						>
